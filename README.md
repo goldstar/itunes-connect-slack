@@ -13,16 +13,14 @@ These scripts read specific values from the bash environment. Be sure to set the
 ```bash
 export BOT_API_TOKEN="xoxb-asdfasdfasfasdfasdfsd" # The API Token for your bot, provided by Slack
 export itc_username="email@email.com" # The email you use to log into iTunes Connect
-export itc_team_id=77416800,77416801 # specify itunes team ids if user has an access to multiple ones (comma separated)
 export bundle_id="com.best.app" # The bundle ID of the app you want these scripts to check
+export SLACK_CHANNEL="channel_name" # The Slack channel to post to
 ```
 
 ### Install node modules
 ```bash
-sudo gem install fastlane
-npm install @slack/client@3.16.0 --save
-npm install dirty --save
-npm install moment --save
+bundle install
+npm install
 ```
 
 ### Store your iTunes Connect password
@@ -32,19 +30,11 @@ fastlane fastlane-credentials add --username itc_username@example.com
 ```
 
 ### Channel info
-Set the specific channel you'd like the bot to post to in `post-update.js`. By default, it posts to `#ios-app-updates`.
-
-### Polling interval
-In `poll-itc.js`, set the `pollIntervalSeconds` value to whatever you like.
+Set the specific channel you'd like the bot to post to in `post-update.js`. By default, it posts to `#apps`.
 
 ### Running the scripts
 ```bash
 node poll-itc.js
-```
-
-Or you can use the [forever](https://github.com/foreverjs/forever) tool to keep it up indefinitely:
-```base
-forever start poll-itc.js
 ```
 
 # Files
