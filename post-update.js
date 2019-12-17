@@ -1,25 +1,28 @@
-var moment = require('moment')
+var moment = require('moment');
+
+const slackUrl = "https://slack.com/api/chat.postMessage";
 
 function postToSlack(appInfo, submissionStartDate) {
-    var WebClient = require('@slack/client').WebClient;
-	var client = new WebClient(process.env.BOT_API_TOKEN);
+    var WebClient = require('@slack/web-api').WebClient;
+	var slack = new WebClient(process.env.BOT_API_TOKEN);
 
 	var message = `The status of your app *${appInfo.name}* has been changed to *${appInfo.status}*`
 	var attachment = slackAttachment(appInfo, submissionStartDate)
 	var params = {
 		"attachments" : [attachment],
-		"as_user" : "true"
+		"channel" : process.env.SLACK_CHANNEL,
+		"text" : message,
+		"username" : "ios-update-bot",
+		"icon_emoji" : ":iphone:"
 	}
+	console.log("Posting to slack", params);
 
-	var channel = process.env.SLACK_CHANNEL_NAME;
-	if(!channel) {
-		channel = '#ios-app-updates';
-	}
-
-	client.chat.postMessage(channel, message, params, function(err, res) {
+	slack.chat.postMessage(params, function(err, res) {
 	    if (err) {
 	        console.log('Error:', err);
-	    }
+	    } else {
+			console.log("Slack resp:", res);
+		}
 	});
 }
 

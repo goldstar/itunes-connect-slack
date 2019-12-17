@@ -2,7 +2,7 @@ var poster = require('./post-update.js');
 var dirty = require('dirty');
 var db = dirty('kvstore.db');
 var debug = false
-var pollIntervalSeconds = process.env.POLL_TIME
+// var pollIntervalSeconds = process.env.POLL_TIME
 
 function checkAppStatus() {
 	console.log("Fetching latest app status...")
@@ -12,14 +12,13 @@ function checkAppStatus() {
 	exec('ruby get-app-status.rb', function (err, stdout, stderr) {
 		if (stdout) {
 			// compare new app info with last one (from database)
-			console.log(stdout)
 			var versions = JSON.parse(stdout);
 
 			for(let version of versions) {
+				console.log("Checking app status...");
   				_checkAppStatus(version);
 			}			
-		}
-		else {
+		} else {
 			console.log("There was a problem fetching the status of the app!");
 			console.log(stderr);
 		}
@@ -29,6 +28,7 @@ function checkAppStatus() {
 function _checkAppStatus(version) {
 	// use the live version if edit version is unavailable
 	var currentAppInfo = version["editVersion"] ? version["editVersion"] : version["liveVersion"];
+	console.log("currentAppInfo: ", currentAppInfo);
 
 	var appInfoKey = 'appInfo-' + currentAppInfo.appId;
 	var submissionStartkey = 'submissionStart' + currentAppInfo.appId;
@@ -53,9 +53,9 @@ function _checkAppStatus(version) {
 	db.set(appInfoKey, currentAppInfo);
 }
 
-if(!pollIntervalSeconds) {
-	pollIntervalSeconds = 60 * 2;
-}
+// if(!pollIntervalSeconds) {
+// 	pollIntervalSeconds = 60 * 15; // Poll every 15 min
+// }
 
-setInterval(checkAppStatus, pollIntervalSeconds * 1000);
+// setInterval(checkAppStatus, pollIntervalSeconds * 1000);
 checkAppStatus();

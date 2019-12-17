@@ -74,16 +74,16 @@ versions = []
 #add for the team_ids
 #test if itc_team doesnt exists
 
-if(itc_team_id_array)
-	for itc_team_id in itc_team_id_array
-		if (itc_team_id)
-			Spaceship::Tunes.client.team_id = itc_team_id
-		end
-		versions += getAppVersionFrom(bundle_id)
-	end
-else
-	versions += getAppVersionFrom(bundle_id)
-end
+# if(itc_team_id_array)
+# 	for itc_team_id in itc_team_id_array
+# 		if (itc_team_id)
+# 			Spaceship::Tunes.client.team_id = itc_team_id
+# 		end
+# 		versions += getAppVersionFrom(bundle_id)
+# 	end
+# else
+versions += getAppVersionFrom(bundle_id)
+# end
 
 
 
