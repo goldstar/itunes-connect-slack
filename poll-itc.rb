@@ -1,5 +1,6 @@
 require './get-app-status.rb'
 require './post-update.rb'
+require './database.rb'
 
 class PollItc
   def self.debug
@@ -25,13 +26,13 @@ class PollItc
     app_info_key = "appInfo-#{current_app_info["appId"]}"
     submission_start_key = "submissionStart#{current_app_info["appId"]}"
 
-    last_app_info = nil
+    last_app_info = Database.get(app_info_key)
     if last_app_info.nil? || last_app_info["status"] != current_app_info["status"] || debug
-      PostUpdate.post_to_slack(current_app_info, nil)
+      PostUpdate.post_to_slack(current_app_info, Database.get(submission_start_key))
 
       # Store submission start time
       if current_app_info["status"] == "Waiting for Review"
-
+        Database.set(submission_start_key, DateTime.new)
       else
         if !current_app_info.nil?
           puts "Current status #{current_app_info["status"]} matches previous status. AppName: #{current_app_info["name"]}"
@@ -42,7 +43,7 @@ class PollItc
     end
 
     # Store latest app info in database
-    # TODO
+    Database.set(app_info_key, current_app_info)
   end
 end
 
