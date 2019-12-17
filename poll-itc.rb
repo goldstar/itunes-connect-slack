@@ -4,7 +4,7 @@ require './database.rb'
 
 class PollItc
   def self.debug
-    true
+    false
   end
 
   def self.check_app_status
