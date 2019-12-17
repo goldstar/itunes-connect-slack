@@ -7,3 +7,4 @@ ruby '2.5.3'
 
 gem "fastlane"
 gem "pry"
+gem "slack-ruby-client"
