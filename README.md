@@ -1,7 +1,7 @@
 itunes-connect-slack
 --------------------
 
-These scripts fetch app info directly from iTunes Connect and posts changes in Slack as a bot. Since iTC doesn't provide event webhooks, these scripts use polling with the help of Fastlane's [Spaceship](https://github.com/fastlane/fastlane/tree/master/spaceship).
+These scripts fetch app info directly from App Store Connect and posts changes in Slack as a bot. Since ASC doesn't provide event webhooks, these scripts use polling with the help of Fastlane's [Spaceship](https://github.com/fastlane/fastlane/tree/master/spaceship).
 
 ![](https://raw.githubusercontent.com/erikvillegas/itunes-connect-slack/master/example.png)
 
@@ -17,24 +17,20 @@ export bundle_id="com.best.app" # The bundle ID of the app you want these script
 export SLACK_CHANNEL="channel_name" # The Slack channel to post to
 ```
 
-### Install node modules
+### Install gems
 ```bash
 bundle install
-npm install
 ```
 
-### Store your iTunes Connect password
+### Store your App Store Connect password
 You can use Fastlane's [CredentialsManager](https://github.com/fastlane/fastlane/tree/master/credentials_manager) to store your password. Enter this command and it will prompt you for your password:
 ```bash
 fastlane fastlane-credentials add --username itc_username@example.com
 ```
 
-### Channel info
-Set the specific channel you'd like the bot to post to in `post-update.js`. By default, it posts to `#apps`.
-
 ### Running the scripts
 ```bash
-node poll-itc.js
+ruby poll-itc.rb
 ```
 
 # Files
@@ -42,8 +38,8 @@ node poll-itc.js
 ### get-app-status.rb
 Ruby script that uses Spaceship to connect to iTunes Connect. It then stdouts a JSON blob with your app info. It only looks for apps that aren't yet live.
 
-### poll-itc.js
-Node script to invoke the ruby script at certain intervals. It uses a key/value store to check for changes, and then invokes `post-update.js`.
+### poll-itc.rb
+Ruby script to invoke the get-app-status.rb at certain intervals. It uses a key/value store to check for changes, and then invokes `post-update.rb`.
 
-### post-update.js
-Node script that uses Slack's node.js SDK to send a message as a bot. It also calculates the number of hours since submission.
+### post-update.rb
+Ruby script that uses Slack's Ruby SDK to send a message as a bot. It also calculates the number of hours since submission.
