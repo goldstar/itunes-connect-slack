@@ -1,0 +1,9 @@
+example.png
+.git
+.gitignore
+Dockerfile
+tags
+README.md
+job.nomad
+.ruby-version
+.bundle
